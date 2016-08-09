@@ -1,0 +1,50 @@
+{
+  "project_info": {
+    "project_number": "167132276065",
+    "firebase_url": "https://find-my-book-f2e15.firebaseio.com",
+    "project_id": "find-my-book-f2e15",
+    "storage_bucket": "find-my-book-f2e15.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167132276065:android:007d33879d968843",
+        "android_client_info": {
+          "package_name": "com.udacity.nanodegree.nghianja.capstone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "167132276065-hfffkcf810cah4s4f5f26lbei01s1d9l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.udacity.nanodegree.nghianja.capstone",
+            "certificate_hash": "A5316C2C21CC4015CF71B9A68312035E5417E5F3"
+          }
+        },
+        {
+          "client_id": "167132276065-ape9slb07te1lu3ra9n5m3v3q2cfj261.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-6YtVFfrnMUU7-PgH0ybq4qcGOf2Ckys"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

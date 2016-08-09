@@ -1,0 +1,38 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!--
+    References:
+    [1] https://medium.com/@lucasurbas/placeholder-ui-launch-screen-d85c35552119#.o84xpzxu7
+    -->
+    <!-- 56 + 48 -->
+    <dimen name="toolbar_placeholder_height">104dp</dimen>
+
+    <dimen name="expanded_start">48dp</dimen>
+    <dimen name="expanded_end">64dp</dimen>
+    <dimen name="expanded_bottom">32dp</dimen>
+
+    <dimen name="fab_elevation">2dp</dimen>
+    <dimen name="fab_press_translation_z">6dp</dimen>
+    <dimen name="fab_margin">24dp</dimen>
+
+    <!-- Icon Sizes -->
+    <dimen name="list_icon">40dp</dimen>
+
+    <!-- Help to make us tablet beautiful -->
+    <dimen name="list_item_extra_padding">0dp</dimen>
+    <dimen name="app_bar_height">128dp</dimen>
+
+    <dimen name="linear_padding">8dp</dimen>
+    <dimen name="cardview_margin">8dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
+    <!-- Widget -->
+    <dimen name="widget_default_height">180dp</dimen>
+    <dimen name="widget_default_width">250dp</dimen>
+    <dimen name="widget_min_resize_height">@dimen/widget_default_height</dimen>
+    <dimen name="widget_min_resize_width">110dp</dimen>
+    <dimen name="widget_margin">8dp</dimen>
+</resources>

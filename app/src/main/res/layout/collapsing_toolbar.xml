@@ -1,0 +1,48 @@
+<!--
+References:
+[1] http://stackoverflow.com/questions/31001583/how-to-get-adview-below-viewpager-in-coordinatorlayout
+[2] http://blog.grafixartist.com/toolbar-animation-with-android-design-support-library/
+[3] http://antonioleiva.com/collapsing-toolbar-layout/
+[4] https://github.com/saulmm/CoordinatorBehaviorExample
+[5] https://guides.codepath.com/android/Handling-Scrolls-with-CoordinatorLayout
+-->
+
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/app_bar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/app_bar_height"
+    android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.design.widget.CollapsingToolbarLayout
+        android:id="@+id/collapsing_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:contentScrim="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+        app:titleEnabled="false">
+
+        <ImageView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/expanded_start"
+            android:layout_gravity="bottom"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_logo"
+            app:layout_collapseMode="parallax"
+            app:layout_collapseParallaxMultiplier="0.60" />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ActionBarTheme"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.CollapsingToolbarLayout>
+
+</android.support.design.widget.AppBarLayout>

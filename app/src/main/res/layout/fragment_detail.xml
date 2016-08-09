@@ -1,0 +1,177 @@
+<!--
+References:
+[1] https://material.google.com/layout/metrics-keylines.html#metrics-keylines-ratio-keylines
+[2] https://plus.google.com/+AndroidDevelopers/posts/ZQS29a5yroK
+[3] http://stackoverflow.com/questions/37888749/how-to-use-percentrelativelayout-in-a-collapsingtoolbarlayout
+-->
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <com.udacity.nanodegree.nghianja.capstone.layout.PercentCollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:collapsedTitleTextAppearance="@style/CustomTitleText"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginStart="@dimen/expanded_start"
+            app:expandedTitleTextAppearance="@style/CustomTitleText"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <ImageView
+                android:id="@+id/book_cover"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/book_cover"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_grayscale"
+                app:layout_aspectRatio="100%"
+                app:layout_widthPercent="100%" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/expanded_end"
+                android:layout_gravity="bottom"
+                android:background="@drawable/scrim_detail" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/ActionBarTheme"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </com.udacity.nanodegree.nghianja.capstone.layout.PercentCollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".DetailActivity"
+        tools:showIn="@layout/fragment_detail">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/linear_padding">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/book_detail_author"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:text="@string/book_detail_author"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/book_detail_subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:text="@string/book_detail_subtitle"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:id="@+id/book_detail_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/book_detail_desc" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/cardview_margin">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/library_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:text="@string/library_name"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/library_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:text="@string/library_address"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:id="@+id/library_hours"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:text="@string/library_hours" />
+
+                    <TextView
+                        android:id="@+id/library_guide"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:text="@string/library_guide" />
+
+                    <ImageView
+                        android:id="@+id/library_image"
+                        android:layout_width="320dp"
+                        android:layout_height="214dp"
+                        android:contentDescription="@string/library_image"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_grayscale" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:src="@drawable/ic_map"
+        style="@style/CustomFloatingActionButton"
+        app:pressedTranslationZ="@dimen/fab_press_translation_z"
+        app:rippleColor="@android:color/white"
+        app:layout_anchor="@+id/app_bar"
+        app:layout_anchorGravity="bottom|end" />
+
+</android.support.design.widget.CoordinatorLayout>

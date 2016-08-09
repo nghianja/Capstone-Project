@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    References:
+    [1] https://medium.com/@lucasurbas/placeholder-ui-launch-screen-d85c35552119#.o84xpzxu7
+    -->
+    <!-- 48 + 48 -->
+    <dimen name="toolbar_placeholder_height">96dp</dimen>
+</resources>
