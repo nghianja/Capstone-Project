@@ -9,14 +9,12 @@
           <set>
             <option value="$USER_HOME$/Repositories/Projapps/GitHub/Capstone-Project" />
             <option value="$USER_HOME$/Repositories/Projapps/GitHub/Capstone-Project/app" />
-            <option value="$USER_HOME$/Repositories/Projapps/GitHub/Capstone-Project/volley" />
           </set>
         </option>
         <option name="myModules">
           <set>
             <option value="$USER_HOME$/Repositories/Projapps/GitHub/Capstone-Project" />
             <option value="$USER_HOME$/Repositories/Projapps/GitHub/Capstone-Project/app" />
-            <option value="$USER_HOME$/Repositories/Projapps/GitHub/Capstone-Project/volley" />
           </set>
         </option>
       </GradleProjectSettings>

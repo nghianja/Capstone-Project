@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$USER_HOME$/Repositories/Projapps/GitHub/Capstone-Project/Capstone-Project.iml" filepath="$USER_HOME$/Repositories/Projapps/GitHub/Capstone-Project/Capstone-Project.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/volley/volley.iml" filepath="$PROJECT_DIR$/volley/volley.iml" />
     </modules>
   </component>
 </project>

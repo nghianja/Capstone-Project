@@ -11,11 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.bumptech.glide.Glide;
 import com.udacity.nanodegree.nghianja.capstone.MasterFragment;
 import com.udacity.nanodegree.nghianja.capstone.R;
-import com.udacity.nanodegree.nghianja.capstone.background.VolleySingleton;
 
 /**
  * {@link BookAdapter} exposes a list of books from a
@@ -35,16 +33,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookAdapterVie
     final private BookAdapterOnClickHandler clickHandler;
     final private View emptyView;
 
-    private ImageLoader imageLoader;
     private Cursor cursor;
 
     public BookAdapter(Context context, BookAdapterOnClickHandler clickHandler, View emptyView) {
         this.context = context;
         this.clickHandler = clickHandler;
         this.emptyView = emptyView;
-
-        // Get the ImageLoader through your singleton class.
-        imageLoader = VolleySingleton.getInstance(context).getImageLoader();
     }
 
     @Override

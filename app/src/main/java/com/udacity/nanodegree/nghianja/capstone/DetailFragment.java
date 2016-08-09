@@ -18,9 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.bumptech.glide.Glide;
-import com.udacity.nanodegree.nghianja.capstone.background.VolleySingleton;
 import com.udacity.nanodegree.nghianja.capstone.data.DataContract.BookEntry;
 
 /**
@@ -42,7 +40,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private Uri uri;
     private CollapsingToolbarLayout toolbarLayout;
     private Toolbar toolbar;
-    private ImageLoader imageLoader;
     private ImageView bookCover;
     private TextView bookAuthor;
     private TextView bookSubtitle;
@@ -94,7 +91,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // Get the ImageLoader through your singleton class.
-        imageLoader = VolleySingleton.getInstance(getActivity()).getImageLoader();
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
