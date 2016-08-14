@@ -2,9 +2,11 @@ package com.udacity.nanodegree.nghianja.capstone.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.util.Log;
 import android.widget.AdapterView;
@@ -51,10 +53,13 @@ public class HomeWidgetService extends RemoteViewsService {
         private Context context;
         private Cursor cursor;
         private Uri uri;
+        private String appWidgetId;
 
         public HomeWidgetFactory(Context context, Intent intent) {
             this.context = context;
             this.uri = intent.getData();
+            this.appWidgetId = intent.getStringExtra("appWidgetId");
+            Log.d(TAG, "appWidgetId=" + this.appWidgetId);
         }
 
         @Override
@@ -93,13 +98,20 @@ public class HomeWidgetService extends RemoteViewsService {
                 Log.e(TAG, error.toString());
             }
             remoteViews.setImageViewBitmap(R.id.widget_book_cover, bookCoverImage);
-//            remoteViews.setTextViewText(R.id.widget_library, cursor.getString(INDEX_LIBRARY_ID));
-            remoteViews.setTextViewText(R.id.widget_library, "CCL");
             Date date = new Date(cursor.getInt(INDEX_LAST_UPDATE) * 1000L);
-//            remoteViews.setTextViewText(R.id.widget_last_update,
-//                    DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM).format(date));
-            remoteViews.setTextViewText(R.id.widget_last_update,
-                    DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date));
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            int columns = prefs.getInt(appWidgetId, 4);
+            if (columns > 2) {
+//            remoteViews.setTextViewText(R.id.widget_library, cursor.getString(INDEX_LIBRARY_ID));
+                remoteViews.setTextViewText(R.id.widget_library, "Central Public Library");
+                remoteViews.setTextViewText(R.id.widget_last_update,
+                        DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM).format(date));
+            } else {
+                remoteViews.setTextViewText(R.id.widget_library, "CCL");
+                remoteViews.setTextViewText(R.id.widget_last_update,
+                        DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date));
+            }
 
             final Intent fillInIntent = new Intent();
             fillInIntent.setData(DataContract.BookEntry.buildBookUri(cursor.getInt(INDEX_ID)));
