@@ -1,13 +1,9 @@
 package com.udacity.nanodegree.nghianja.capstone;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 public class DetailActivity extends AppCompatActivity {
-
-    private static final String TAG = DetailActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +13,9 @@ public class DetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Uri uri = getIntent().getData();
-            Log.d(TAG, uri.toString());
-
             Bundle arguments = new Bundle();
-            arguments.putParcelable(DetailFragment.DETAIL_URI, uri);
+            arguments.putParcelable(DetailFragment.DETAIL_URI, getIntent().getData());
+
 
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);

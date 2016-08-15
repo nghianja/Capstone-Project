@@ -74,16 +74,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
 
         bookCover = (ImageView) rootView.findViewById(R.id.book_cover);
-//        bookCover.setDefaultImageResId(R.drawable.ic_grayscale);
-//        bookCover.setErrorImageResId(R.drawable.ic_grayscale);
 
         bookAuthor = (TextView) rootView.findViewById(R.id.book_detail_author);
         bookSubtitle = (TextView) rootView.findViewById(R.id.book_detail_subtitle);
         bookDesc = (TextView) rootView.findViewById(R.id.book_detail_desc);
 
         libraryImage = (ImageView) rootView.findViewById(R.id.library_image);
-//        libraryImage.setDefaultImageResId(R.drawable.ic_grayscale);
-//        libraryImage.setErrorImageResId(R.drawable.ic_grayscale);
 
         return rootView;
     }
@@ -102,7 +98,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.d(TAG, "onCreateLoader");
+        Log.d(TAG, "onCreateLoader=" + uri.toString());
         if (uri != null) {
             // Now create and return a CursorLoader that will take care of
             // creating a Cursor for the data being displayed.

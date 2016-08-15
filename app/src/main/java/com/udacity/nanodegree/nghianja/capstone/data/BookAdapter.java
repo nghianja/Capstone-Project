@@ -27,8 +27,6 @@ import com.udacity.nanodegree.nghianja.capstone.R;
  */
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookAdapterViewHolder> {
 
-    private static final String TAG = BookAdapter.class.getSimpleName();
-
     final private Context context;
     final private BookAdapterOnClickHandler clickHandler;
     final private View emptyView;
@@ -92,7 +90,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookAdapterVie
     @Override
     public void onBindViewHolder(BookAdapterViewHolder viewHolder, int position) {
         cursor.moveToPosition(position);
-        int id = cursor.getInt(MasterFragment.COL_BOOK_ID);
         String imageUrl = cursor.getString(MasterFragment.COL_IMAGE_URL);
         String title = cursor.getString(MasterFragment.COL_TITLE);
         String subtitle = cursor.getString(MasterFragment.COL_SUBTITLE);

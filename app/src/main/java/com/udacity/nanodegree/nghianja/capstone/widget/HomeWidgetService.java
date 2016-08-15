@@ -114,7 +114,8 @@ public class HomeWidgetService extends RemoteViewsService {
             }
 
             final Intent fillInIntent = new Intent();
-            fillInIntent.setData(DataContract.BookEntry.buildBookUri(cursor.getInt(INDEX_ID)));
+            int dateColumnIndex = cursor.getColumnIndex(DataContract.BookEntry._ID);
+            fillInIntent.setData(DataContract.BookEntry.buildBookUri(cursor.getLong(dateColumnIndex)));
             remoteViews.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
 
             return remoteViews;
