@@ -31,7 +31,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class HomeWidgetService extends RemoteViewsService {
 
-    private static final String TAG = "HomeWidgetService";
+    private static final String TAG = HomeWidgetService.class.getSimpleName();
 
     private static final String[] LIBRARY_COLUMNS = {
             DataContract.BookEntry._ID,

@@ -11,11 +11,11 @@ import android.support.v4.os.ResultReceiver;
  * [2] http://stackoverflow.com/questions/33889229/android-service-extends-resultreceiver-for-intentservice-how-to-implement-creat
  */
 @SuppressLint("ParcelCreator")
-public class BookResultReceiver extends ResultReceiver {
+public class LibraryResultReceiver extends ResultReceiver {
 
     private Receiver receiver;
 
-    public BookResultReceiver(Handler handler) {
+    public LibraryResultReceiver(Handler handler) {
         super(handler);
     }
 

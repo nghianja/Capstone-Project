@@ -37,7 +37,7 @@ import java.net.URL;
  */
 public class BookIntentService extends IntentService {
 
-    private final String TAG = BookIntentService.class.getSimpleName();
+    private static final String TAG = BookIntentService.class.getSimpleName();
 
     public static final String RECEIVER = "receiver";
     public static final String FETCH_BOOK = "fetch";
@@ -45,7 +45,7 @@ public class BookIntentService extends IntentService {
     public static final String EAN = "ean";
 
     public BookIntentService() {
-        super("Capstone");
+        super(TAG);
     }
 
     @Override
@@ -55,13 +55,13 @@ public class BookIntentService extends IntentService {
             final String action = intent.getAction();
             if (FETCH_BOOK.equals(action)) {
                 /* Sending running status back to fragment */
-                receiver.send(BookResultReceiver.STATUS_RUNNING, Bundle.EMPTY);
+                receiver.send(Receiver.STATUS_RUNNING, Bundle.EMPTY);
 
                 final String ean = intent.getStringExtra(EAN);
                 fetchBook(ean, receiver);
 
                 /* Sending finished status back to fragment */
-                receiver.send(BookResultReceiver.STATUS_FINISHED, Bundle.EMPTY);
+                receiver.send(Receiver.STATUS_FINISHED, Bundle.EMPTY);
             } else if (DELETE_BOOK.equals(action)) {
                 final String ean = intent.getStringExtra(EAN);
                 deleteBook(ean, receiver);

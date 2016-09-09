@@ -75,6 +75,10 @@
         <service
             android:name=".background.BookIntentService"
             android:exported="false" />
+
+        <service
+            android:name=".background.LibraryIntentService"
+            android:exported="false" />
     </application>
 
 </manifest>

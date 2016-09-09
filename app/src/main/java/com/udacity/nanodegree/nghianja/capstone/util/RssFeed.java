@@ -2,13 +2,16 @@ package com.udacity.nanodegree.nghianja.capstone.util;
 
 import android.content.ContentValues;
 import android.util.Log;
+import android.util.Xml;
 
 import com.udacity.nanodegree.nghianja.capstone.data.DataContract;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +22,9 @@ import java.util.List;
  * [1] https://androidresearch.wordpress.com/2012/01/21/creating-a-simple-rss-application-in-android/
  * [2] http://www.vogella.com/tutorials/AndroidXML/article.html
  * [3] http://www.tutorialspoint.com/android/android_rss_reader.htm
+ * [4] http://www.ibm.com/developerworks/opensource/library/x-android/
+ * [5] http://stackoverflow.com/questions/12152718/not-able-to-set-the-default-namespace-in-android-xmlserializer
+ * [6] http://stackoverflow.com/questions/27270041/writing-an-xml-using-xmlserializer-and-change-prefix-n0-to-ns1
  */
 public class RssFeed {
 
@@ -104,5 +110,36 @@ public class RssFeed {
             eventType = xpp.nextToken(); //move to next element
         }
         return valuesList;
+    }
+
+    public static String writeXml(String apiKey, String ean) {
+        XmlSerializer serializer = Xml.newSerializer();
+        StringWriter writer = new StringWriter();
+        try {
+            serializer.setOutput(writer);
+            serializer.startDocument("UTF-8", true);
+            serializer.setPrefix("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            serializer.setPrefix("xsd", "http://www.w3.org/2001/XMLSchema");
+            serializer.setPrefix("soap", "http://schemas.xmlsoap.org/soap/envelope/");
+            serializer.startTag("http://schemas.xmlsoap.org/soap/envelope/", "Envelope");
+            serializer.startTag("http://schemas.xmlsoap.org/soap/envelope/", "Body");
+            serializer.startTag("", "GetAvailabilityInfoRequest");
+            serializer.attribute("", "xmlns", "http://www.nlb.gov.sg/ws/CatalogueService");
+            serializer.startTag("", "APIKey");
+            serializer.text(apiKey);
+            serializer.endTag("", "APIKey");
+            serializer.startTag("", "ISBN");
+            serializer.text(ean);
+            serializer.endTag("", "ISBN");
+            serializer.startTag("", "Modifiers");
+            serializer.endTag("", "Modifiers");
+            serializer.endTag("", "GetAvailabilityInfoRequest");
+            serializer.endTag("http://schemas.xmlsoap.org/soap/envelope/", "Body");
+            serializer.endTag("http://schemas.xmlsoap.org/soap/envelope/", "Envelope");
+            serializer.endDocument();
+            return writer.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

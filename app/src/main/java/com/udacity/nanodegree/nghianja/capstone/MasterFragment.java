@@ -28,6 +28,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.udacity.nanodegree.nghianja.capstone.background.BookIntentService;
 import com.udacity.nanodegree.nghianja.capstone.background.BookResultReceiver;
+import com.udacity.nanodegree.nghianja.capstone.background.Receiver;
 import com.udacity.nanodegree.nghianja.capstone.data.BookAdapter;
 import com.udacity.nanodegree.nghianja.capstone.data.DataContract;
 import com.udacity.nanodegree.nghianja.capstone.util.Isbn;
@@ -43,7 +44,7 @@ import com.udacity.nanodegree.nghianja.capstone.widget.HomeWidgetProvider;
  * [4] http://antonioleiva.com/collapsing-toolbar-layout/
  * [5] http://stackoverflow.com/questions/31662416/show-collapsingtoolbarlayout-title-only-when-collapsed
  */
-public class MasterFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, BookResultReceiver.Receiver {
+public class MasterFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, Receiver {
 
     private static final String TAG = MasterFragment.class.getSimpleName();
     private static final int LOADER_ID = 1;
@@ -268,11 +269,11 @@ public class MasterFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
         switch (resultCode) {
-            case BookResultReceiver.STATUS_RUNNING:
+            case Receiver.STATUS_RUNNING:
                 fabClickable = false;
                 fabProgressCircle.show();
                 break;
-            case BookResultReceiver.STATUS_FINISHED:
+            case Receiver.STATUS_FINISHED:
                 getLoaderManager().restartLoader(LOADER_ID, null, this);
                 fabProgressCircle.hide();
                 fabClickable = true;
@@ -282,7 +283,7 @@ public class MasterFragment extends Fragment implements LoaderManager.LoaderCall
                         .setPackage(getActivity().getPackageName());
                 getActivity().sendBroadcast(dataUpdatedIntent);
                 break;
-            case BookResultReceiver.STATUS_ERROR:
+            case Receiver.STATUS_ERROR:
                 /* Handle the error */
                 String error = resultData.getString(Intent.EXTRA_TEXT);
                 Log.e(TAG, error);

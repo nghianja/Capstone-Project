@@ -28,7 +28,7 @@ import com.udacity.nanodegree.nghianja.capstone.data.DataContract;
  */
 public class HomeWidgetProvider extends AppWidgetProvider {
 
-    public static final String TAG = "HomeWidgetProvider";
+    public static final String TAG = HomeWidgetProvider.class.getSimpleName();
     public static final String ACTION_DATA_UPDATED = "com.udacity.nanodegree.nghianja.capstone.ACTION_DATA_UPDATED";
 
     @Override
