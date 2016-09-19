@@ -1,4 +1,4 @@
-package com.udacity.nanodegree.nghianja.capstone.util;
+package com.udacity.nanodegree.nghianja.capstone.serialization;
 
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
@@ -9,6 +9,7 @@ import java.util.Hashtable;
  * References:
  * [1] http://simpligility.github.io/ksoap2-android/tips.html
  * [2] http://stackoverflow.com/questions/9805946/nesting-properties-inside-a-tag-in-ksoap2
+ * [3] http://stackoverflow.com/questions/10160719/android-ksoap-object-mapping
  */
 public class GetAvailabilityInfoRequest implements KvmSerializable {
     private String APIKey;

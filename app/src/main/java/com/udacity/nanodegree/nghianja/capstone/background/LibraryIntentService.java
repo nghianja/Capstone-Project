@@ -9,12 +9,18 @@ import android.util.Log;
 
 import com.udacity.nanodegree.nghianja.capstone.MasterActivity;
 import com.udacity.nanodegree.nghianja.capstone.R;
+import com.udacity.nanodegree.nghianja.capstone.serialization.GetAvailabilityInfoResponse;
+import com.udacity.nanodegree.nghianja.capstone.serialization.Item;
 import com.udacity.nanodegree.nghianja.capstone.util.Network;
 
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
+import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -29,6 +35,7 @@ import org.ksoap2.transport.HttpTransportSE;
  * [6] http://stackoverflow.com/questions/9805946/nesting-properties-inside-a-tag-in-ksoap2
  * [7] http://javatutorialspoint.blogspot.sg/2012/02/android-web-service-access-using-ksoap2.html
  * [8] http://stackoverflow.com/questions/12634082/setting-ksoap2-prefix-on-the-xmlns-attribute-only
+ * [9] http://stackoverflow.com/questions/34802771/java-lang-classcastexception-java-util-vector-cannot-be-cast-to-org-ksoap2-seri
  */
 public class LibraryIntentService extends IntentService {
 
@@ -108,9 +115,58 @@ public class LibraryIntentService extends IntentService {
             httpTransport.call(SOAP_ACTION, envelope);
             Log.d(TAG, httpTransport.requestDump);
             Log.d(TAG, httpTransport.responseDump);
+
+            GetAvailabilityInfoResponse response = new GetAvailabilityInfoResponse();
+            if (envelope.getResponse() != null) {
+                Vector result = (Vector) envelope.getResponse();
+                int resultCount = result.size();
+                Object object = result.get(resultCount - 1);
+                if (object instanceof SoapObject) {
+                    ArrayList<Item> items = new ArrayList<>();
+                    SoapObject soapObject = (SoapObject) object;
+                    int totalCount = soapObject.getPropertyCount();
+                    for (int detailCount = 0; detailCount < totalCount; detailCount++) {
+                        SoapObject pojoSoap = (SoapObject) soapObject.getProperty(detailCount);
+                        Item item = new Item();
+                        item.ItemNo = pojoSoap.getProperty("ItemNo").toString();
+                        item.BranchID = pojoSoap.getProperty("BranchID").toString();
+                        item.BranchName = pojoSoap.getProperty("BranchName").toString();
+                        item.LocationCode = pojoSoap.getProperty("LocationCode").toString();
+                        item.LocationDesc = pojoSoap.getProperty("LocationDesc").toString();
+                        item.CallNumber = pojoSoap.getProperty("CallNumber").toString();
+                        item.StatusCode = pojoSoap.getProperty("StatusCode").toString();
+                        item.StatusDesc = pojoSoap.getProperty("StatusDesc").toString();
+                        item.MediaCode = pojoSoap.getProperty("MediaCode").toString();
+                        item.MediaDesc = pojoSoap.getProperty("MediaDesc").toString();
+                        item.StatusDate = pojoSoap.getProperty("StatusDate").toString();
+                        items.add(item);
+                    }
+                    response.setItems(items);
+                }
+
+                response.setStatus(result.get(0).toString());
+                response.setMessage(result.get(1).toString());
+                String s = result.get(2).toString();
+                try {
+                    if (!s.isEmpty()) {
+                        Integer.parseInt(s);
+                    }
+                    response.setNextRecordPosition(s);
+                    response.setSetId(result.get(3).toString());
+                } catch (Exception d) {
+                    response.setErrorMessage(s);
+                    response.setSetId(result.get(4).toString());
+                }
+
+            }
         } catch (Exception e) {
             Log.e(TAG, "Error ", e);
+            try {
+                SoapObject response = (SoapObject) envelope.getResponse();
+                Log.d(TAG, response.toString());
+            } catch (SoapFault f) {
+                Log.e(TAG, "Fault ", f);
+            }
         }
-
     }
 }
