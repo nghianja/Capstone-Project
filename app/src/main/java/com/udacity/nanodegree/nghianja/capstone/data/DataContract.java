@@ -46,6 +46,7 @@ public class DataContract {
         public static final String COLUMN_SUBTITLE = "subtitle";
         public static final String COLUMN_DESC = "description";
         public static final String COLUMN_IMAGE_URL = "imageUrl";
+        public static final String COLUMN_STATUS_CODE = "statusCode";
         public static final String COLUMN_LIBRARY_ID = "libraryId";
         public static final String COLUMN_LAST_UPDATE = "lastUpdate";
 

@@ -8,8 +8,28 @@ import android.app.Application;
  */
 public class MyApplication extends Application {
 
+    private double latitude = 1.3;
+    private double longitude = 103.85;
+
     @Override
     public void onCreate() {
         super.onCreate();
     }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
 }

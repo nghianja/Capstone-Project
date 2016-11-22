@@ -33,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 DataContract.BookEntry.COLUMN_SUBTITLE + " TEXT, " +
                 DataContract.BookEntry.COLUMN_DESC + " TEXT, " +
                 DataContract.BookEntry.COLUMN_IMAGE_URL + " TEXT, " +
+                DataContract.BookEntry.COLUMN_STATUS_CODE + " TEXT, " +
                 DataContract.BookEntry.COLUMN_LIBRARY_ID + " TEXT, " +
                 DataContract.BookEntry.COLUMN_LAST_UPDATE + " INTEGER, " +
                 "UNIQUE (" + DataContract.BookEntry._ID + ") ON CONFLICT IGNORE)";

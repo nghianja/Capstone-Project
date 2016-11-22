@@ -1,16 +1,21 @@
 package com.udacity.nanodegree.nghianja.capstone.background;
 
 import android.app.IntentService;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.os.ResultReceiver;
 import android.util.Log;
 
 import com.udacity.nanodegree.nghianja.capstone.MasterActivity;
+import com.udacity.nanodegree.nghianja.capstone.MyApplication;
 import com.udacity.nanodegree.nghianja.capstone.R;
+import com.udacity.nanodegree.nghianja.capstone.data.DataContract;
 import com.udacity.nanodegree.nghianja.capstone.serialization.GetAvailabilityInfoResponse;
 import com.udacity.nanodegree.nghianja.capstone.serialization.Item;
+import com.udacity.nanodegree.nghianja.capstone.util.Distance;
 import com.udacity.nanodegree.nghianja.capstone.util.Network;
 
 import org.ksoap2.SoapEnvelope;
@@ -40,10 +45,23 @@ import java.util.Vector;
 public class LibraryIntentService extends IntentService {
 
     private static final String TAG = LibraryIntentService.class.getSimpleName();
+    private static final int LOADER_ID = 0;
+    private static final String[] LOADER_COLUMNS = {
+            DataContract.LibraryEntry.TABLE_NAME + "." + DataContract.LibraryEntry._ID,
+            DataContract.LibraryEntry.COLUMN_TITLE,
+            DataContract.LibraryEntry.COLUMN_GEO_POINT
+    };
+
+    // These indices are tied to LOADER_COLUMNS.  If LOADER_COLUMNS changes, these must change.
+    public static final int COL_LIBRARY_ID = 0;
+    public static final int COL_TITLE = 1;
+    public static final int COL_GEO_POINT = 2;
 
     public static final String RECEIVER = "receiver";
     public static final String AVAILABILITY = "availability";
     public static final String EAN = "ean";
+
+    private MyApplication myApp;
 
     public LibraryIntentService() {
         super(TAG);
@@ -51,6 +69,8 @@ public class LibraryIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        myApp = (MyApplication) getApplication();
+
         if (intent != null) {
             final ResultReceiver receiver = intent.getParcelableExtra(RECEIVER);
             final String action = intent.getAction();
@@ -109,7 +129,7 @@ public class LibraryIntentService extends IntentService {
         envelope.dotNet = true;
         envelope.setOutputSoapObject(request);
 
-        HttpTransportSE httpTransport = new HttpTransportSE(SERVICE_URL);
+        HttpTransportSE httpTransport = new HttpTransportSE(SERVICE_URL, 60000);
         httpTransport.debug = true;
         try {
             httpTransport.call(SOAP_ACTION, envelope);
@@ -119,6 +139,12 @@ public class LibraryIntentService extends IntentService {
             GetAvailabilityInfoResponse response = new GetAvailabilityInfoResponse();
             if (envelope.getResponse() != null) {
                 Vector result = (Vector) envelope.getResponse();
+                String status = result.get(0).toString();
+                Log.d(TAG, status);
+                if (!status.equals("OK")) {
+                    return;
+                }
+
                 int resultCount = result.size();
                 Object object = result.get(resultCount - 1);
                 if (object instanceof SoapObject) {
@@ -158,15 +184,78 @@ public class LibraryIntentService extends IntentService {
                     response.setSetId(result.get(4).toString());
                 }
 
+                writeBackLibrary(ean, response);
             }
         } catch (Exception e) {
             Log.e(TAG, "Error ", e);
             try {
                 SoapObject response = (SoapObject) envelope.getResponse();
-                Log.d(TAG, response.toString());
+                if (response != null) {
+                    Log.d(TAG, response.toString());
+                }
             } catch (SoapFault f) {
                 Log.e(TAG, "Fault ", f);
             }
         }
     }
+
+    private void writeBackLibrary(String ean, GetAvailabilityInfoResponse response) {
+        String statusCode = null;
+        String libraryCode = null;
+        double distance = 0;
+        double temp;
+
+        for (Item item : response.getItems()) {
+            temp = getDistance(item.BranchID);
+            if (statusCode == null) {
+                statusCode = item.StatusCode;
+                libraryCode = item.BranchID;
+                distance = temp;
+            } else if (!statusCode.equals("S")) {
+                if (item.StatusCode.equals("S")) {
+                    statusCode = item.StatusCode;
+                    libraryCode = item.BranchID;
+                    distance = temp;
+                } else if (distance > temp) {
+                    statusCode = item.StatusCode;
+                    libraryCode = item.BranchID;
+                    distance = temp;
+                }
+            } else if (item.StatusCode.equals("S")) {
+                if (distance > temp) {
+                    statusCode = item.StatusCode;
+                    libraryCode = item.BranchID;
+                    distance = temp;
+                }
+            }
+        }
+
+        if (statusCode != null) {
+            ContentValues values = new ContentValues();
+            values.put(DataContract.BookEntry.COLUMN_STATUS_CODE, statusCode);
+            values.put(DataContract.BookEntry.COLUMN_LIBRARY_ID, libraryCode);
+            values.put(DataContract.BookEntry.COLUMN_LAST_UPDATE, System.currentTimeMillis() / 1000L);
+            getContentResolver().update(DataContract.BookEntry.buildBookUri(Long.parseLong(ean)), values, null, null);
+        }
+    }
+
+    private double getDistance(String branchId) {
+        double distance = Distance.EARTH_RAD;
+        // get GeoPoint of library
+        Cursor libraryEntry = getContentResolver().query(
+                DataContract.LibraryEntry.buildLibraryUri(branchId), LOADER_COLUMNS, null, null, null
+        );
+        if (libraryEntry != null && libraryEntry.moveToFirst()) {
+            Log.d(TAG, libraryEntry.getString(COL_TITLE) + ": " + libraryEntry.getString(COL_GEO_POINT));
+            String[] geopoint = libraryEntry.getString(COL_GEO_POINT).split(" ");
+            libraryEntry.close();
+            distance = Distance.getDistance(
+                    myApp.getLatitude(), myApp.getLongitude(),
+                    Double.parseDouble(geopoint[0]), Double.parseDouble(geopoint[1])
+            );
+        }
+        Log.d(TAG, "Distance: " + distance);
+        return distance;
+    }
+
 }

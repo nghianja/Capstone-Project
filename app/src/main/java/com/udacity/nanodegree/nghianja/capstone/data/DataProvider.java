@@ -89,6 +89,14 @@ public class DataProvider extends ContentProvider {
                         selectionArgs, null, null, sortOrder
                 );
                 break;
+            case LIBRARY_ID:
+                retCursor = databaseHelper.getReadableDatabase().query(
+                        DataContract.LibraryEntry.TABLE_NAME,
+                        projection,
+                        DataContract.LibraryEntry._ID + " = '" + uri.getLastPathSegment() + "'",
+                        selectionArgs, null, null, sortOrder
+                );
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -200,6 +208,14 @@ public class DataProvider extends ContentProvider {
             case LIBRARY:
                 rowsUpdated = sqLiteDatabase.update(
                         DataContract.LibraryEntry.TABLE_NAME, values, selection, selectionArgs
+                );
+                break;
+            case BOOK_ID:
+                rowsUpdated = sqLiteDatabase.update(
+                        DataContract.BookEntry.TABLE_NAME,
+                        values,
+                        DataContract.BookEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
+                        selectionArgs
                 );
                 break;
             default:
