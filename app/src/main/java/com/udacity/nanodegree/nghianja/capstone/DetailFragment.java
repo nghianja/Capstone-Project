@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,6 +27,11 @@ import com.udacity.nanodegree.nghianja.capstone.background.LibraryResultReceiver
 import com.udacity.nanodegree.nghianja.capstone.background.Receiver;
 import com.udacity.nanodegree.nghianja.capstone.data.DataContract;
 import com.udacity.nanodegree.nghianja.capstone.data.DataContract.BookEntry;
+import com.udacity.nanodegree.nghianja.capstone.data.DataContract.LibraryEntry;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -44,6 +50,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             BookEntry.COLUMN_LIBRARY_ID,
             BookEntry.COLUMN_LAST_UPDATE
     };
+    private static final String[] LIBRARY_COLUMNS = {
+            LibraryEntry.TABLE_NAME + "." + LibraryEntry._ID,
+            LibraryEntry.COLUMN_LIBRARY_IMAGE,
+            LibraryEntry.COLUMN_TITLE,
+            LibraryEntry.COLUMN_ADDRESS,
+            LibraryEntry.COLUMN_OPERATING,
+            LibraryEntry.COLUMN_GUIDE
+    };
 
     private Uri uri;
     private CollapsingToolbarLayout toolbarLayout;
@@ -52,6 +66,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView bookAuthor;
     private TextView bookSubtitle;
     private TextView bookDesc;
+    private TextView updated;
+    private ProgressBar loading;
+    private TextView libraryName;
+    private TextView libraryAddress;
+    private TextView libraryHours;
+    private TextView libraryGuide;
     private ImageView libraryImage;
     private LibraryResultReceiver resultReceiver;
 
@@ -64,6 +84,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static final int COL_DESC = 5;
     public static final int COL_LIBRARY_ID = 6;
     public static final int COL_LAST_UPDATE = 7;
+
+    // These indices are tied to LIBRARY_COLUMNS.  If LIBRARY_COLUMNS changes, these must change.
+    public static final int COL_BRANCH_ID = 0;
+    public static final int COL_IMAGE = 1;
+    public static final int COL_NAME = 2;
+    public static final int COL_ADDRESS = 3;
+    public static final int COL_OPERATING = 4;
+    public static final int COL_GUIDE = 5;
 
     public static final String DETAIL_URI = "uri";
 
@@ -90,6 +118,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         bookSubtitle = (TextView) rootView.findViewById(R.id.book_detail_subtitle);
         bookDesc = (TextView) rootView.findViewById(R.id.book_detail_desc);
 
+        updated = (TextView) rootView.findViewById(R.id.updated);
+        loading = (ProgressBar) rootView.findViewById(R.id.loading);
+        loading.setVisibility(View.INVISIBLE);
+
+        libraryName = (TextView) rootView.findViewById(R.id.library_name);
+        libraryAddress = (TextView) rootView.findViewById(R.id.library_address);
+        libraryHours = (TextView) rootView.findViewById(R.id.library_hours);
+        libraryGuide = (TextView) rootView.findViewById(R.id.library_guide);
         libraryImage = (ImageView) rootView.findViewById(R.id.library_image);
 
         return rootView;
@@ -135,11 +171,26 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             }
             bookDesc.setText(data.getString(COL_DESC));
 
+            SimpleDateFormat sdf = new SimpleDateFormat("d MMM", new Locale("SG"));
+            Date lastUpdated = new Date(data.getLong(COL_LAST_UPDATE));
+            updated.setText(getString(R.string.updated, sdf.format(lastUpdated)));
+
+            libraryName.setText(getString(R.string.library_name, ""));
+
             String libraryID = data.getString(COL_LIBRARY_ID);
             if (libraryID != null && !libraryID.isEmpty()) {
-                Glide.with(DetailFragment.this)
-                        .load("http://www.nlb.gov.sg/Portals/0/library/gallery/Central/MAIN-CTPL-cropped.jpg")
-                        .error(R.drawable.ic_grayscale).into(libraryImage);
+                Uri uri = LibraryEntry.buildLibraryUri(libraryID);
+                Cursor cursor = getActivity().getContentResolver().query(uri, LIBRARY_COLUMNS, null, null, null);
+                if (cursor != null) {
+                    libraryName.setText(getString(R.string.library_name, cursor.getString(COL_NAME)));
+                    libraryAddress.setText(cursor.getString(COL_ADDRESS));
+                    libraryHours.setText(cursor.getString(COL_OPERATING));
+                    libraryGuide.setText(cursor.getString(COL_GUIDE));
+                    Glide.with(DetailFragment.this)
+                            .load(cursor.getString(COL_IMAGE))
+                            .error(R.drawable.ic_grayscale).into(libraryImage);
+                    cursor.close();
+                }
             }
 
             Intent libraryIntent = new Intent(getActivity(), LibraryIntentService.class);
@@ -158,10 +209,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onReceiveResult(int resultCode, Bundle resultData) {
         switch (resultCode) {
             case Receiver.STATUS_RUNNING:
+                loading.setVisibility(View.VISIBLE);
                 break;
             case Receiver.STATUS_FINISHED:
+                loading.setVisibility(View.INVISIBLE);
                 break;
             case Receiver.STATUS_ERROR:
+                loading.setVisibility(View.INVISIBLE);
                 /* Handle the error */
                 String error = resultData.getString(Intent.EXTRA_TEXT);
                 Log.e(TAG, error);

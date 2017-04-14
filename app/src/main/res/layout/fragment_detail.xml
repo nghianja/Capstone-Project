@@ -119,6 +119,27 @@ References:
                     android:layout_margin="@dimen/text_margin"
                     android:orientation="vertical">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/text_margin"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/updated"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/updated" />
+
+                        <ProgressBar
+                            android:id="@+id/loading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@android:style/Widget.ProgressBar.Small" />
+
+                    </LinearLayout>
+
                     <TextView
                         android:id="@+id/library_name"
                         android:layout_width="match_parent"

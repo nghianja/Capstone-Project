@@ -24,10 +24,12 @@
     <string name="book_detail_subtitle">[subtitle]</string>
     <string name="book_detail_desc">[description]</string>
 
-    <string name="library_name">available at Central Public Library</string>
-    <string name="library_address">100 Victoria Street National Library Board  Singapore 188064</string>
-    <string name="library_hours">Mon - Sun: 10:00 AM - 09:00 PM</string>
-    <string name="library_guide">Nearest MRT: Bugis, City Hall MRT Station|Bus Interchange: |Buses: 145, 197, 32, 51, 63, 7, 80, 175, 851, 61</string>
+    <string name="updated">updated %1$s</string>
+
+    <string name="library_name">available at %1$s</string>
+    <string name="library_address">[address]</string>
+    <string name="library_hours">[operating hours]</string>
+    <string name="library_guide">[transport guide]</string>
     <string name="library_image">Library Photo</string>
 
     <string name="widget_library_name">Library Name</string>
