@@ -215,6 +215,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 break;
             case Receiver.STATUS_FINISHED:
                 loading.setVisibility(View.INVISIBLE);
+                SimpleDateFormat sdf = new SimpleDateFormat("d MMM h:mm a");
+                Date lastUpdated = new Date(System.currentTimeMillis());
+                updated.setText(getString(R.string.updated, sdf.format(lastUpdated)));
+                showLibraryDetails(resultData.getString(LibraryIntentService.LIBRARY));
                 break;
             case Receiver.STATUS_ERROR:
                 loading.setVisibility(View.INVISIBLE);

@@ -60,8 +60,10 @@ public class LibraryIntentService extends IntentService {
     public static final String RECEIVER = "receiver";
     public static final String AVAILABILITY = "availability";
     public static final String EAN = "ean";
+    public static final String LIBRARY = "library";
 
     private MyApplication myApp;
+    private String library;
 
     public LibraryIntentService() {
         super(TAG);
@@ -70,6 +72,7 @@ public class LibraryIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         myApp = (MyApplication) getApplication();
+        library = null;
 
         if (intent != null) {
             final ResultReceiver receiver = intent.getParcelableExtra(RECEIVER);
@@ -82,7 +85,13 @@ public class LibraryIntentService extends IntentService {
                 getAvailability(ean, receiver);
 
                 /* Sending finished status back to fragment */
-                receiver.send(Receiver.STATUS_FINISHED, Bundle.EMPTY);
+                if (library == null) {
+                    receiver.send(Receiver.STATUS_FINISHED, Bundle.EMPTY);
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putCharSequence(LIBRARY, library);
+                    receiver.send(Receiver.STATUS_FINISHED, bundle);
+                }
             }
         }
     }
@@ -236,6 +245,7 @@ public class LibraryIntentService extends IntentService {
             values.put(DataContract.BookEntry.COLUMN_LIBRARY_ID, libraryCode);
             values.put(DataContract.BookEntry.COLUMN_LAST_UPDATE, System.currentTimeMillis());
             getContentResolver().update(DataContract.BookEntry.buildBookUri(Long.parseLong(ean)), values, null, null);
+            library = libraryCode;
         }
     }
 
