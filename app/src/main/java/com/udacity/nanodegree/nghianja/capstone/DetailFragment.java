@@ -31,7 +31,6 @@ import com.udacity.nanodegree.nghianja.capstone.data.DataContract.LibraryEntry;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -171,27 +170,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             }
             bookDesc.setText(data.getString(COL_DESC));
 
-            SimpleDateFormat sdf = new SimpleDateFormat("d MMM", new Locale("SG"));
+            SimpleDateFormat sdf = new SimpleDateFormat("d MMM h:mm a");
             Date lastUpdated = new Date(data.getLong(COL_LAST_UPDATE));
+            Log.d(TAG, lastUpdated.toString());
             updated.setText(getString(R.string.updated, sdf.format(lastUpdated)));
 
             libraryName.setText(getString(R.string.library_name, ""));
-
-            String libraryID = data.getString(COL_LIBRARY_ID);
-            if (libraryID != null && !libraryID.isEmpty()) {
-                Uri uri = LibraryEntry.buildLibraryUri(libraryID);
-                Cursor cursor = getActivity().getContentResolver().query(uri, LIBRARY_COLUMNS, null, null, null);
-                if (cursor != null) {
-                    libraryName.setText(getString(R.string.library_name, cursor.getString(COL_NAME)));
-                    libraryAddress.setText(cursor.getString(COL_ADDRESS));
-                    libraryHours.setText(cursor.getString(COL_OPERATING));
-                    libraryGuide.setText(cursor.getString(COL_GUIDE));
-                    Glide.with(DetailFragment.this)
-                            .load(cursor.getString(COL_IMAGE))
-                            .error(R.drawable.ic_grayscale).into(libraryImage);
-                    cursor.close();
-                }
-            }
+            showLibraryDetails(data.getString(COL_LIBRARY_ID));
 
             Intent libraryIntent = new Intent(getActivity(), LibraryIntentService.class);
             int dateColumnIndex = data.getColumnIndex(DataContract.BookEntry._ID);
@@ -199,6 +184,23 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             libraryIntent.setAction(LibraryIntentService.AVAILABILITY);
             libraryIntent.putExtra(LibraryIntentService.RECEIVER, resultReceiver);
             getActivity().startService(libraryIntent);
+        }
+    }
+
+    private void showLibraryDetails(String libraryID) {
+        if (libraryID != null && !libraryID.isEmpty()) {
+            Uri uri = LibraryEntry.buildLibraryUri(libraryID);
+            Cursor cursor = getActivity().getContentResolver().query(uri, LIBRARY_COLUMNS, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                libraryName.setText(getString(R.string.library_name, cursor.getString(COL_NAME)));
+                libraryAddress.setText(cursor.getString(COL_ADDRESS));
+                libraryHours.setText(cursor.getString(COL_OPERATING));
+                libraryGuide.setText(cursor.getString(COL_GUIDE));
+                Glide.with(DetailFragment.this)
+                        .load(cursor.getString(COL_IMAGE))
+                        .error(R.drawable.ic_grayscale).into(libraryImage);
+                cursor.close();
+            }
         }
     }
 

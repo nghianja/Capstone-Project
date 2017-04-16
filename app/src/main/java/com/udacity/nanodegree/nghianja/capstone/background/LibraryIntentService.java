@@ -234,7 +234,7 @@ public class LibraryIntentService extends IntentService {
             ContentValues values = new ContentValues();
             values.put(DataContract.BookEntry.COLUMN_STATUS_CODE, statusCode);
             values.put(DataContract.BookEntry.COLUMN_LIBRARY_ID, libraryCode);
-            values.put(DataContract.BookEntry.COLUMN_LAST_UPDATE, System.currentTimeMillis() / 1000L);
+            values.put(DataContract.BookEntry.COLUMN_LAST_UPDATE, System.currentTimeMillis());
             getContentResolver().update(DataContract.BookEntry.buildBookUri(Long.parseLong(ean)), values, null, null);
         }
     }

@@ -213,7 +213,7 @@ public class BookIntentService extends IntentService {
         values.put(DataContract.BookEntry.COLUMN_IMAGE_URL, imgUrl);
         values.put(DataContract.BookEntry.COLUMN_STATUS_CODE, "");
         values.put(DataContract.BookEntry.COLUMN_LIBRARY_ID, "");
-        values.put(DataContract.BookEntry.COLUMN_LAST_UPDATE, System.currentTimeMillis() / 1000L);
+        values.put(DataContract.BookEntry.COLUMN_LAST_UPDATE, System.currentTimeMillis());
         getContentResolver().insert(DataContract.BookEntry.CONTENT_URI, values);
     }
 
