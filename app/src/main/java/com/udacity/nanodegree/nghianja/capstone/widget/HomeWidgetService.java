@@ -104,7 +104,7 @@ public class HomeWidgetService extends RemoteViewsService {
                 Log.e(TAG, error.toString());
             }
             remoteViews.setImageViewBitmap(R.id.widget_book_cover, bookCoverImage);
-            Date date = new Date(cursor.getInt(INDEX_LAST_UPDATE));
+            Date date = new Date(cursor.getLong(INDEX_LAST_UPDATE));
             String libraryID = cursor.getString(INDEX_LIBRARY_ID);
             String libraryName = "";
             if (libraryID != null && !libraryID.isEmpty()) {
@@ -125,7 +125,7 @@ public class HomeWidgetService extends RemoteViewsService {
             if (columns > 2) {
                 remoteViews.setTextViewText(R.id.widget_library, libraryName);
                 remoteViews.setTextViewText(R.id.widget_last_update,
-                        DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM).format(date));
+                        DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(date));
             } else {
                 remoteViews.setTextViewText(R.id.widget_library, libraryID);
                 remoteViews.setTextViewText(R.id.widget_last_update,

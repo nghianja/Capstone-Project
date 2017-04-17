@@ -28,6 +28,7 @@ import com.udacity.nanodegree.nghianja.capstone.background.Receiver;
 import com.udacity.nanodegree.nghianja.capstone.data.DataContract;
 import com.udacity.nanodegree.nghianja.capstone.data.DataContract.BookEntry;
 import com.udacity.nanodegree.nghianja.capstone.data.DataContract.LibraryEntry;
+import com.udacity.nanodegree.nghianja.capstone.widget.HomeWidgetProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -219,6 +220,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 Date lastUpdated = new Date(System.currentTimeMillis());
                 updated.setText(getString(R.string.updated, sdf.format(lastUpdated)));
                 showLibraryDetails(resultData.getString(LibraryIntentService.LIBRARY));
+
+                // Setting the package ensures that only components in our app will receive the broadcast
+                Intent dataUpdatedIntent = new Intent(HomeWidgetProvider.ACTION_DATA_UPDATED)
+                        .setPackage(getActivity().getPackageName());
+                getActivity().sendBroadcast(dataUpdatedIntent);
                 break;
             case Receiver.STATUS_ERROR:
                 loading.setVisibility(View.INVISIBLE);
