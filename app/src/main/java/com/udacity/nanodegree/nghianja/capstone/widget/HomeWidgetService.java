@@ -33,17 +33,23 @@ public class HomeWidgetService extends RemoteViewsService {
 
     private static final String TAG = HomeWidgetService.class.getSimpleName();
 
-    private static final String[] LIBRARY_COLUMNS = {
+    private static final String[] BOOK_COLUMNS = {
             DataContract.BookEntry._ID,
             DataContract.BookEntry.COLUMN_IMAGE_URL,
             DataContract.BookEntry.COLUMN_LIBRARY_ID,
             DataContract.BookEntry.COLUMN_LAST_UPDATE
+    };
+    
+    private static final String[] LIBRARY_COLUMNS = {
+            DataContract.LibraryEntry._ID,
+            DataContract.LibraryEntry.COLUMN_TITLE
     };
 
     private static final int INDEX_ID = 0;
     private static final int INDEX_IMAGE_URL = 1;
     private static final int INDEX_LIBRARY_ID = 2;
     private static final int INDEX_LAST_UPDATE = 3;
+    private static final int INDEX_LIBRARY_NAME = 1;
 
     public RemoteViewsService.RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new HomeWidgetFactory(this.getApplicationContext(), intent);
@@ -98,17 +104,26 @@ public class HomeWidgetService extends RemoteViewsService {
                 Log.e(TAG, error.toString());
             }
             remoteViews.setImageViewBitmap(R.id.widget_book_cover, bookCoverImage);
-            Date date = new Date(cursor.getInt(INDEX_LAST_UPDATE) * 1000L);
+            Date date = new Date(cursor.getInt(INDEX_LAST_UPDATE));
+            String libraryID = cursor.getString(INDEX_LIBRARY_ID);
+            String libraryName = "";
+            if (libraryID != null && !libraryID.isEmpty()) {
+                Uri uri = LibraryEntry.buildLibraryUri(libraryID);
+                Cursor cursor = getActivity().getContentResolver().query(uri, LIBRARY_COLUMNS, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    libraryName = cursor.getString(INDEX_LIBRARY_NAME);
+                } else {
+                    libraryName = libraryID;
+            }
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             int columns = prefs.getInt(appWidgetId, 4);
             if (columns > 2) {
-//            remoteViews.setTextViewText(R.id.widget_library, cursor.getString(INDEX_LIBRARY_ID));
-                remoteViews.setTextViewText(R.id.widget_library, "Central Public Library");
+                remoteViews.setTextViewText(R.id.widget_library, libraryName);
                 remoteViews.setTextViewText(R.id.widget_last_update,
                         DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM).format(date));
             } else {
-                remoteViews.setTextViewText(R.id.widget_library, "CCL");
+                remoteViews.setTextViewText(R.id.widget_library, libraryID);
                 remoteViews.setTextViewText(R.id.widget_last_update,
                         DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date));
             }
@@ -140,7 +155,7 @@ public class HomeWidgetService extends RemoteViewsService {
         public void onDataSetChanged() {
             if (cursor != null)
                 cursor.close();
-            cursor = getContentResolver().query(uri, LIBRARY_COLUMNS, null, null, null);
+            cursor = getContentResolver().query(uri, BOOK_COLUMNS, null, null, null);
         }
 
         @Override
