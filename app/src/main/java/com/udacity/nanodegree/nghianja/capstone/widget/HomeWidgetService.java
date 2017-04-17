@@ -108,12 +108,16 @@ public class HomeWidgetService extends RemoteViewsService {
             String libraryID = cursor.getString(INDEX_LIBRARY_ID);
             String libraryName = "";
             if (libraryID != null && !libraryID.isEmpty()) {
-                Uri uri = LibraryEntry.buildLibraryUri(libraryID);
-                Cursor cursor = getActivity().getContentResolver().query(uri, LIBRARY_COLUMNS, null, null, null);
+                Uri uri = DataContract.LibraryEntry.buildLibraryUri(libraryID);
+                Cursor cursor = getContentResolver().query(uri, LIBRARY_COLUMNS, null, null, null);
                 if (cursor != null && cursor.moveToFirst()) {
                     libraryName = cursor.getString(INDEX_LIBRARY_NAME);
                 } else {
                     libraryName = libraryID;
+                }
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
