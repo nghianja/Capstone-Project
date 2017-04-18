@@ -20,7 +20,8 @@ import com.udacity.nanodegree.nghianja.capstone.data.BookAdapter;
  * [1] http://www.vogella.com/tutorials/AndroidBroadcastReceiver/article.html
  * [2] http://stackoverflow.com/questions/31662416/show-collapsingtoolbarlayout-title-only-when-collapsed
  */
-public class MasterActivity extends AppCompatActivity implements MasterFragment.Callback {
+public class MasterActivity extends AppCompatActivity 
+        implements MasterFragment.Callback, ConnectionCallbacks, OnConnectionFailedListener {
 
     private static final String TAG = MasterActivity.class.getSimpleName();
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -52,7 +53,7 @@ public class MasterActivity extends AppCompatActivity implements MasterFragment.
         */
         
         // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
+        if (checkPlayServices() && mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -93,6 +94,14 @@ public class MasterActivity extends AppCompatActivity implements MasterFragment.
     public void onItemSelected(Uri bookUri, BookAdapter.BookAdapterViewHolder vh) {
         Intent intent = new Intent(this, DetailActivity.class).setData(bookUri);
         startActivity(intent);
+    }
+    
+    @Override
+    public void onConnected(Bundle connectionHint) {
+    }
+    
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
     }
 
     /**
