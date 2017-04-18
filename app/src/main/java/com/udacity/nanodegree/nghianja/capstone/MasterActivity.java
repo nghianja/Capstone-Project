@@ -13,6 +13,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationServices;
 import com.udacity.nanodegree.nghianja.capstone.data.BookAdapter;
 
 /**
@@ -101,9 +105,19 @@ public class MasterActivity extends AppCompatActivity
     @Override
     public void onConnected(Bundle connectionHint) {
     }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        Log.w(TAG, "The client is disconnected.");
+        Toast.makeText(MasterActivity.this,
+                "Reconnecting to location service...", Toast.LENGTH_SHORT).show();
+    }
     
     @Override
     public void onConnectionFailed(ConnectionResult result) {
+        Log.w(TAG, "The client fails to connect.");
+        Toast.makeText(MasterActivity.this,
+                "Unable to connect to location service.", Toast.LENGTH_SHORT).show();
     }
 
     /**
