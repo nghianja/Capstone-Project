@@ -27,6 +27,8 @@ public class MasterActivity extends AppCompatActivity implements MasterFragment.
 
     public static final String MESSAGE_EVENT = "MESSAGE_EVENT";
     public static final String MESSAGE_KEY = "MESSAGE_EXTRA";
+    
+    private GoogleApiClient mGoogleApiClient;
 
     private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
         @Override
@@ -48,10 +50,31 @@ public class MasterActivity extends AppCompatActivity implements MasterFragment.
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
         */
+        
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        }
+    }
+    
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+    
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
 
         // Register messageReceiver to receive messages.
