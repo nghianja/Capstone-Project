@@ -4,8 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,17 +27,21 @@ import com.udacity.nanodegree.nghianja.capstone.data.BookAdapter;
  * References:
  * [1] http://www.vogella.com/tutorials/AndroidBroadcastReceiver/article.html
  * [2] http://stackoverflow.com/questions/31662416/show-collapsingtoolbarlayout-title-only-when-collapsed
+ * [3] http://stackoverflow.com/questions/32491960/android-check-permission-for-locationmanager
  */
 public class MasterActivity extends AppCompatActivity 
         implements MasterFragment.Callback, ConnectionCallbacks, OnConnectionFailedListener {
 
     private static final String TAG = MasterActivity.class.getSimpleName();
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final int MY_PERMISSION_ACCESS_COURSE_LOCATION = 8000;
 
     public static final String MESSAGE_EVENT = "MESSAGE_EVENT";
     public static final String MESSAGE_KEY = "MESSAGE_EXTRA";
     
     private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+    private MyApplication myApp;
 
     private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
         @Override
@@ -101,9 +109,25 @@ public class MasterActivity extends AppCompatActivity
         Intent intent = new Intent(this, DetailActivity.class).setData(bookUri);
         startActivity(intent);
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_ACCESS_COURSE_LOCATION:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getLastKnownLocation();
+                } else {
+                    Log.i(TAG, "Location permission is not given.");
+                    finish();
+                }
+                return;
+        }
+    }
     
     @Override
     public void onConnected(Bundle connectionHint) {
+        getLastKnownLocation();
     }
 
     @Override
@@ -139,5 +163,20 @@ public class MasterActivity extends AppCompatActivity
             return false;
         }
         return true;
+    }
+
+    private void getLastKnownLocation() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[] { android.Manifest.permission.ACCESS_COARSE_LOCATION },
+                    MY_PERMISSION_ACCESS_COURSE_LOCATION);
+        } else {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (mLastLocation != null) {
+                myApp.setLatitude(mLastLocation.getLatitude());
+                myApp.setLongitude(mLastLocation.getLongitude());
+            }
+        }
     }
 }
