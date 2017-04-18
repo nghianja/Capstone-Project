@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -111,7 +112,7 @@ public class MasterActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSION_ACCESS_COURSE_LOCATION:
                 // If request is cancelled, the result arrays are empty.
@@ -121,7 +122,6 @@ public class MasterActivity extends AppCompatActivity
                     Log.i(TAG, "Location permission is not given.");
                     finish();
                 }
-                return;
         }
     }
     
@@ -138,7 +138,7 @@ public class MasterActivity extends AppCompatActivity
     }
     
     @Override
-    public void onConnectionFailed(ConnectionResult result) {
+    public void onConnectionFailed(@NonNull ConnectionResult result) {
         Log.w(TAG, "The client fails to connect.");
         Toast.makeText(MasterActivity.this,
                 "Unable to connect to location service.", Toast.LENGTH_SHORT).show();
