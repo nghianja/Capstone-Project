@@ -73,6 +73,8 @@ public class MasterActivity extends AppCompatActivity
                 .addApi(LocationServices.API)
                 .build();
         }
+        
+        myApp = (MyApplication) getApplication();
     }
     
     @Override
