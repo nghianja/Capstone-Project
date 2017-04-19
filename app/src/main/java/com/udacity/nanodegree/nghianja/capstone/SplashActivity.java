@@ -17,7 +17,7 @@ import com.udacity.nanodegree.nghianja.capstone.util.Network;
  */
 public class SplashActivity extends AppCompatActivity implements SplashTaskFragment.TaskCallbacks {
 
-    private static final String TAG = MasterActivity.class.getSimpleName();
+    private static final String TAG = SplashActivity.class.getSimpleName();
     private static final String TAG_TASK_FRAGMENT = "splashTaskFragment";
 
     @Override
