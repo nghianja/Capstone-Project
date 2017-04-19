@@ -65,16 +65,12 @@ public class MasterActivity extends AppCompatActivity
         adView.loadAd(adRequest);
         */
         
-        // Create an instance of GoogleAPIClient.
-        if (checkPlayServices() && mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        }
-        
         myApp = (MyApplication) getApplication();
+        
+        // Kick off the process of building the GoogleApiClient, LocationRequest, and LocationSettingsRequest objects.
+        buildGoogleApiClient();
+        createLocationRequest();
+        buildLocationSettingsRequest();
     }
     
     @Override
@@ -105,6 +101,20 @@ public class MasterActivity extends AppCompatActivity
         // Unregister since the activity is not visible
         LocalBroadcastManager.getInstance(this).unregisterReceiver(messageReceiver);
         super.onPause();
+    }
+    
+    /**
+     * Builds a GoogleApiClient. Uses the {@code #addApi} method to request the LocationServices API.
+     */
+    protected synchronized void buildGoogleApiClient() {
+        // Create an instance of GoogleAPIClient.
+        if (checkPlayServices() && mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        }
     }
 
     @Override
