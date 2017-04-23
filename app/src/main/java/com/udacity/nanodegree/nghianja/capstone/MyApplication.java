@@ -1,6 +1,7 @@
 package com.udacity.nanodegree.nghianja.capstone;
 
 import android.app.Application;
+import android.util.Log;
 
 /**
  * Application class for loading required setup data from server
