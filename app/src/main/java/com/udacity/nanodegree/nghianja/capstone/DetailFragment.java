@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             LibraryEntry.COLUMN_LIBRARY_IMAGE,
             LibraryEntry.COLUMN_TITLE,
             LibraryEntry.COLUMN_ADDRESS,
+            LibraryEntry.COLUMN_GEO_POINT,
             LibraryEntry.COLUMN_OPERATING,
             LibraryEntry.COLUMN_GUIDE
     };
@@ -75,6 +77,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private ImageView libraryImage;
     private LibraryResultReceiver resultReceiver;
 
+    private String latitude = "1.297414";
+    private String longitude = "103.854235";
+    private String label = "Central Public Library";
+
     // These indices are tied to LOADER_COLUMNS.  If LOADER_COLUMNS changes, these must change.
     public static final int COL_BOOK_ID = 0;
     public static final int COL_IMAGE_URL = 1;
@@ -90,8 +96,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static final int COL_IMAGE = 1;
     public static final int COL_NAME = 2;
     public static final int COL_ADDRESS = 3;
-    public static final int COL_OPERATING = 4;
-    public static final int COL_GUIDE = 5;
+    public static final int COL_GEO_POINT = 4;
+    public static final int COL_OPERATING = 5;
+    public static final int COL_GUIDE = 6;
 
     public static final String DETAIL_URI = "uri";
 
@@ -108,6 +115,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        final Button button = (Button) rootView.findViewById(R.id.fab);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requestMapIntent();
+            }
+        });
 
         toolbarLayout = (CollapsingToolbarLayout) rootView.findViewById(R.id.toolbar_layout);
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
@@ -200,6 +215,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 Glide.with(DetailFragment.this)
                         .load(cursor.getString(COL_IMAGE))
                         .error(R.drawable.ic_grayscale).into(libraryImage);
+
+                String[] geopoint = cursor.getString(COL_GEO_POINT).split(" ");
+                latitude = geopoint[0];
+                longitude = geopoint[1];
+                label = cursor.getString(COL_NAME);
+                
                 cursor.close();
             }
         }
@@ -232,5 +253,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 String error = resultData.getString(Intent.EXTRA_TEXT);
                 Log.e(TAG, error);
         }
+    }
+
+    private void requestMapIntent() {
+        // Create a Uri from an intent string. Use the result to create an Intent.
+        Uri gmmIntentUri = Uri.parse("geo:1.3,103.85?q=" +
+                Uri.encode(latitude + "," + longitude + "(" + label + ")"));
+
     }
 }
