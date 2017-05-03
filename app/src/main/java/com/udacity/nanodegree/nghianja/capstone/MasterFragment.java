@@ -22,7 +22,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -64,38 +63,11 @@ public class MasterFragment extends Fragment implements LoaderManager.LoaderCall
     public static final int COL_AUTHOR = 4;
 
     private Toolbar toolbar;
-    private ActionBar actionBar;
     private IntentIntegrator integrator;
     private BookAdapter bookAdapter;
     private BookResultReceiver resultReceiver;
     private FABProgressCircle fabProgressCircle;
     private boolean fabClickable;
-
-    /*
-    private android.support.design.widget.AppBarLayout.OnOffsetChangedListener listener =
-            new AppBarLayout.OnOffsetChangedListener() {
-                boolean isShow = false;
-                int scrollRange = -1;
-
-                @Override
-                public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                    if (scrollRange == -1) {
-                        scrollRange = appBarLayout.getTotalScrollRange();
-                    }
-                    if (scrollRange + verticalOffset <= 10) {
-                        if (actionBar != null) {
-                            actionBar.setDisplayShowTitleEnabled(true);
-                        }
-                        isShow = true;
-                    } else if (isShow) {
-                        if (actionBar != null) {
-                            actionBar.setDisplayShowTitleEnabled(false);
-                        }
-                        isShow = false;
-                    }
-                }
-            };
-    */
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -124,11 +96,6 @@ public class MasterFragment extends Fragment implements LoaderManager.LoaderCall
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_master, container, false);
 
-        /*
-        AppBarLayout appBarLayout = (AppBarLayout) rootView.findViewById(R.id.app_bar);
-        appBarLayout.addOnOffsetChangedListener(listener);
-        */
-
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
 
         integrator = IntentIntegrator.forSupportFragment(this);
@@ -140,7 +107,6 @@ public class MasterFragment extends Fragment implements LoaderManager.LoaderCall
             public void onClick(View v) {
                 if (fabClickable) {
                     integrator.initiateScan();
-//                    startActivity(new Intent(getActivity(),AndroidDatabaseManager.class));
                 }
             }
         });
@@ -213,7 +179,7 @@ public class MasterFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
         }
@@ -273,25 +239,11 @@ public class MasterFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         bookAdapter.swapCursor(data);
-        // updateEmptyView();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         bookAdapter.swapCursor(null);
-    }
-
-    /**
-     * Updates the empty list view with contextually relevant information
-     */
-    private void updateEmptyView() {
-        if (bookAdapter.getItemCount() == 0) {
-            TextView emptyText = (TextView) getView().findViewById(R.id.empty_text);
-            if (emptyText != null) {
-                int message = R.string.empty_book_list;
-                emptyText.setText(message);
-            }
-        }
     }
 
     @Override
