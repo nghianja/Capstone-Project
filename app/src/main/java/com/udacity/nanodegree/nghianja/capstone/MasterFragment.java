@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -147,7 +148,7 @@ public class MasterFragment extends Fragment implements LoaderManager.LoaderCall
         fabProgressCircle = (FABProgressCircle) rootView.findViewById(R.id.fabProgressCircle);
 
         // Get a reference to the RecyclerView, and attach this adapter to it.
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_books);
+        final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_books);
 
         // Set the layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -178,6 +179,33 @@ public class MasterFragment extends Fragment implements LoaderManager.LoaderCall
         if (savedInstanceState != null) {
             bookAdapter.onRestoreInstanceState(savedInstanceState);
         }
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
+                new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView,
+                                          RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                        Cursor cursor = bookAdapter.getCursor();
+                        cursor.moveToPosition(viewHolder.getAdapterPosition());
+                        int dateColumnIndex = cursor.getColumnIndex(DataContract.BookEntry._ID);
+                        Long id = cursor.getLong(dateColumnIndex);
+                        Uri uri = DataContract.BookEntry.buildBookUri(id);
+                        int rowsDeleted = getActivity().getContentResolver().delete(uri, null, null);
+                        if (rowsDeleted > 0) {
+                            Log.d(TAG, "Deleted ID: " + id);
+                            updateViewAndWidget();
+                        }
+                    }
+                };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         return rootView;
     }
@@ -274,19 +302,23 @@ public class MasterFragment extends Fragment implements LoaderManager.LoaderCall
                 fabProgressCircle.show();
                 break;
             case Receiver.STATUS_FINISHED:
-                getLoaderManager().restartLoader(LOADER_ID, null, this);
+                updateViewAndWidget();
                 fabProgressCircle.hide();
                 fabClickable = true;
-
-                // Setting the package ensures that only components in our app will receive the broadcast
-                Intent dataUpdatedIntent = new Intent(HomeWidgetProvider.ACTION_DATA_UPDATED)
-                        .setPackage(getActivity().getPackageName());
-                getActivity().sendBroadcast(dataUpdatedIntent);
                 break;
             case Receiver.STATUS_ERROR:
                 /* Handle the error */
                 String error = resultData.getString(Intent.EXTRA_TEXT);
                 Log.e(TAG, error);
         }
+    }
+
+    private void updateViewAndWidget() {
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
+
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(HomeWidgetProvider.ACTION_DATA_UPDATED)
+                .setPackage(getActivity().getPackageName());
+        getActivity().sendBroadcast(dataUpdatedIntent);
     }
 }
