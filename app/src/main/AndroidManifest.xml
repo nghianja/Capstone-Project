@@ -44,8 +44,6 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
 
-        <!-- Activity for viewing database. To be removed after testing. -->
-
         <provider
             android:name=".data.DataProvider"
             android:authorities="com.udacity.nanodegree.nghianja.capstone"
