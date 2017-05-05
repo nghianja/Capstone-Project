@@ -45,9 +45,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
 
         <!-- Activity for viewing database. To be removed after testing. -->
-        <activity
-            android:name=".AndroidDatabaseManager"
-            android:theme="@style/Theme.AppCompat.Light" />
 
         <provider
             android:name=".data.DataProvider"
