@@ -6,7 +6,7 @@
     <string name="rss_library_info" translatable="false">https://opendata.nlb.gov.sg/content/RSS.LibraryInfo</string>
     <string name="application_id" translatable="false">DEV-JamesNg</string>
     <string name="api_key" translatable="false">REVWLUphbWVzTkc6MHBlbndAYmphbWVz</string>
-    <string name="namespace" translatable="false">https://www.nlb.gov.sg/ws/CatalogueService</string>
+    <string name="namespace" translatable="false">http://www.nlb.gov.sg/ws/CatalogueService</string>
     <string name="method_name" translatable="false">GetAvailabilityInfoRequest</string>
     <string name="soap_action" translatable="false">https://www.nlb.gov.sg/ws/CatalogueService/ICatalogueService/GetAvailabilityInfo</string>
     <string name="service_url" translatable="false">https://openweb-stg.nlb.gov.sg/OWS/CatalogueService.svc</string>
