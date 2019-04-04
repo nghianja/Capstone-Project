@@ -14,6 +14,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.udacity.nanodegree.nghianja.capstone.R;
 import com.udacity.nanodegree.nghianja.capstone.data.DataContract;
 
@@ -95,10 +96,11 @@ public class HomeWidgetService extends RemoteViewsService {
 
             Bitmap bookCoverImage = null;
             try {
+                RequestOptions options = new RequestOptions().error(R.mipmap.ic_launcher);
                 bookCoverImage = Glide.with(HomeWidgetService.this)
-                        .load(cursor.getString(INDEX_IMAGE_URL))
                         .asBitmap()
-                        .error(R.mipmap.ic_launcher)
+                        .load(cursor.getString(INDEX_IMAGE_URL))
+                        .apply(options)
                         .into(40, 40).get();
             } catch (InterruptedException | ExecutionException error) {
                 Log.e(TAG, error.toString());

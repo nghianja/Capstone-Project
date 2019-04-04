@@ -51,5 +51,3 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     testImplementation 'junit:junit:4.12'
 }
-
-apply plugin: 'com.google.gms.google-services'

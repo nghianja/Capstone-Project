@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.udacity.nanodegree.nghianja.capstone.MasterFragment;
 import com.udacity.nanodegree.nghianja.capstone.R;
 
@@ -95,12 +96,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookAdapterVie
         String subtitle = cursor.getString(MasterFragment.COL_SUBTITLE);
         String author = cursor.getString(MasterFragment.COL_AUTHOR);
 
-        /*
-        viewHolder.bookCover.setDefaultImageResId(R.mipmap.ic_launcher);
-        viewHolder.bookCover.setErrorImageResId(R.mipmap.ic_launcher);
-        viewHolder.bookCover.setImageUrl(imageUrl, imageLoader);
-        */
-        Glide.with(context).load(imageUrl).error(R.mipmap.ic_launcher).into(viewHolder.bookCover);
+        RequestOptions options = new RequestOptions().error(R.mipmap.ic_launcher);
+        Glide.with(context).load(imageUrl).apply(options).into(viewHolder.bookCover);
 
         // this enables better animations. even if we lose state due to a device rotation,
         // the animator can use this to re-find the original view

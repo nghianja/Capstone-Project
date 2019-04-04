@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.udacity.nanodegree.nghianja.capstone.background.LibraryIntentService;
 import com.udacity.nanodegree.nghianja.capstone.background.LibraryResultReceiver;
 import com.udacity.nanodegree.nghianja.capstone.background.Receiver;
@@ -176,7 +177,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Log.d(TAG, "onLoadFinished");
         if (data != null && data.moveToFirst()) {
             Log.d(TAG, data.getString(COL_IMAGE_URL));
-            Glide.with(DetailFragment.this).load(data.getString(COL_IMAGE_URL)).error(R.drawable.ic_grayscale).into(bookCover);
+            RequestOptions options = new RequestOptions().error(R.drawable.ic_grayscale);
+            Glide.with(DetailFragment.this).load(data.getString(COL_IMAGE_URL)).apply(options).into(bookCover);
             toolbarLayout.setTitle(data.getString(COL_TITLE));
             bookAuthor.setText(getString(R.string.book_detail_author, data.getString(COL_AUTHOR)));
             if (data.getString(COL_SUBTITLE).isEmpty()) {
@@ -212,9 +214,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 libraryAddress.setText(cursor.getString(COL_ADDRESS));
                 libraryHours.setText(cursor.getString(COL_OPERATING));
                 libraryGuide.setText(cursor.getString(COL_GUIDE));
+                RequestOptions options = new RequestOptions().error(R.drawable.ic_grayscale);
                 Glide.with(DetailFragment.this)
                         .load(cursor.getString(COL_IMAGE))
-                        .error(R.drawable.ic_grayscale).into(libraryImage);
+                        .apply(options)
+                        .into(libraryImage);
 
                 String[] geopoint = cursor.getString(COL_GEO_POINT).split(" ");
                 latitude = geopoint[0];
