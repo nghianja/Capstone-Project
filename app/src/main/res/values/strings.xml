@@ -4,7 +4,7 @@
 
     <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-    
+
     <string name="rss_library_info" translatable="false">https://opendata.nlb.gov.sg/content/RSS.LibraryInfo</string>
     <string name="application_id" translatable="false">DEV-JamesNg</string>
     <string name="api_key" translatable="false">REVWLUphbWVzTkc6MHBlbndAYmphbWVz</string>

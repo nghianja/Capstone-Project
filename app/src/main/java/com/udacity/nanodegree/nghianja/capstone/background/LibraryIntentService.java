@@ -113,17 +113,6 @@ public class LibraryIntentService extends IntentService {
             return;
         }
 
-        // Commented out WebServiceTest.jar and the following as javax.* packages are not supported in Android
-        /*
-        GetAvailabilityInfoRequest request = new GetAvailabilityInfoRequest();
-        request.setAPIKey(getString(R.string.api_key));
-        request.setISBN(ean);
-        CatalogueService service = new CatalogueService();
-        ICatalogueService port = service.getBasicHttpBindingICatalogueService();
-        GetAvailabilityInfoResponse response = port.getAvailabilityInfo(request);
-        Log.d(TAG, response.getMessage());
-        */
-
         final String NAMESPACE = getString(R.string.namespace);
         final String METHOD_NAME = getString(R.string.method_name);
         final String SOAP_ACTION = getString(R.string.soap_action);
