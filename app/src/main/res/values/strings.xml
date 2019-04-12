@@ -10,7 +10,7 @@
     <string name="api_key" translatable="false">REVWLUphbWVzTkc6MHBlbndAYmphbWVz</string>
     <string name="namespace" translatable="false">http://www.nlb.gov.sg/ws/CatalogueService</string>
     <string name="method_name" translatable="false">GetAvailabilityInfoRequest</string>
-    <string name="soap_action" translatable="false">https://www.nlb.gov.sg/ws/CatalogueService/ICatalogueService/GetAvailabilityInfo</string>
+    <string name="soap_action" translatable="false">http://www.nlb.gov.sg/ws/CatalogueService/ICatalogueService/GetAvailabilityInfo</string>
     <string name="service_url" translatable="false">https://openweb-stg.nlb.gov.sg/OWS/CatalogueService.svc</string>
 
     <string name="empty_book_list">You have no books in the library.</string>
